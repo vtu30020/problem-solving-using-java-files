@@ -1,0 +1,41 @@
+import java.util.*;
+
+public class test {
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        Deque<Integer> deque = new ArrayDeque<>();
+        HashMap<Integer, Integer> map = new HashMap<>();
+        
+        int n = in.nextInt();
+        int m = in.nextInt();
+        int maxUnique = 0;
+
+        for (int i = 0; i < n; i++) {
+            int num = in.nextInt();
+            
+            // Add new element to the deque and map (compatible with Java 7)
+            deque.add(num);
+            int count = map.containsKey(num) ? map.get(num) : 0;
+            map.put(num, count + 1);
+
+            // Once the window size reaches 'm'
+            if (deque.size() == m) {
+                // The number of unique elements is the size of the map
+                if (map.size() > maxUnique) {
+                    maxUnique = map.size();
+                }
+
+                // Remove the oldest element from the left of the window
+                int removed = deque.remove();
+                map.put(removed, map.get(removed) - 1);
+                
+                // If its frequency drops to zero, remove it from the map entirely
+                if (map.get(removed) == 0) {
+                    map.remove(removed);
+                }
+            }
+        }
+
+        System.out.println(maxUnique);
+    }
+}
